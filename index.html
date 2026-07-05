@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>元素記号＆化学式クイズマスター</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500;700&family=Sawarabi+Gothic&display=swap');
+    
+    body {
+      font-family: 'Kiwi Maru', 'Sawarabi Gothic', sans-serif;
+      background-color: #0f172a;
+      background-image: radial-gradient(circle at top, #1e1b4b 0%, #0c0f1d 100%);
+      background-attachment: fixed;
+    }
+    
+    /* PCでの操作性を極大化するための基本リセット */
+    button, select, input {
+      outline: none;
+    }
+
+    /* 文字色をデバイス・ブラウザの設定によらず高コントラストで固定 */
+    .text-light-force {
+      color: #f8fafc !important; /* slate-50 */
+    }
+    .text-dark-force {
+      color: #0f172a !important; /* slate-950 */
+    }
+    .text-teal-force {
+      color: #2dd4bf !important; /* teal-400 */
+    }
+    .text-slate-400-force {
+      color: #94a3b8 !important; /* slate-400 */
+    }
+
+    .custom-shadow {
+      box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.5), 0 10px 15px -5px rgba(0, 0, 0, 0.5);
+    }
+    
+    .neon-border-blue {
+      box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
+    }
+    .neon-border-teal {
+      box-shadow: 0 0 25px rgba(45, 212, 191, 0.4);
+    }
+
+    /* ボタンホバー時のリッチなアニメーション */
+    .hover-trigger {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .hover-trigger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
+    }
+
+    /* ふわふわ浮遊アニメーション */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+    .floating {
+      animation: float 5s ease-in-out infinite;
+    }
+
+    /* 化学式の下付き文字を少しきれいに見せるための微調整 */
+    sub {
+      font-size: 0.65em;
+      bottom: -0.15em;
+      margin-left: 1px;
+      margin-right: 1px;
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body class="text-light-force min-h-screen flex flex-col justify-between p-6 sm:p-10 select-none">
+
+  <!-- ヘッダー -->
+  <header class="w-full max-w-3xl mx-auto flex justify-between items-center py-4 mb-6 border-b border-slate-700/40 shrink-0">
+    <div class="flex items-center gap-3 cursor-pointer" onclick="goHome()">
+      <span class="text-3xl">🧪</span>
+      <h1 class="text-xl sm:text-2xl font-black bg-gradient-to-r from-teal-400 via-blue-400 to-indigo-500 bg-clip-text text-transparent tracking-wider">
+        化学＆元素クイズマスター
+      </h1>
+    </div>
+    <div class="flex gap-3">
+      <button onclick="showSection('encyclopedia')" class="bg-slate-800 hover:bg-slate-700 hover-trigger text-slate-300 px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 transition-all border border-slate-700/50">
+        <i class="fa-solid fa-book text-teal-400 text-teal-force"></i> <span class="text-light-force">学習図鑑</span>
+      </button>
+      <button id="soundBtn" onclick="toggleSound()" class="bg-slate-800 hover:bg-slate-700 hover-trigger text-slate-300 px-4 py-2 rounded-xl text-sm font-bold transition-all border border-slate-700/50">
+        <i id="soundIcon" class="fa-solid fa-volume-high text-light-force"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- メインコンテンツ領域 -->
+  <main class="flex-grow flex items-center justify-center w-full max-w-3xl mx-auto my-6">
+    
+    <!-- 1. ホーム（スタート）画面 -->
+    <section id="homeSection" class="w-full text-center space-y-6 py-2 flex flex-col items-center">
+      
+      <!-- メインアイコン -->
+      <div class="floating my-2 flex justify-center items-center w-full h-28">
+        <div class="relative w-24 h-24">
+          <div class="w-full h-full bg-gradient-to-br from-indigo-900 to-slate-900 rounded-2xl border-4 border-teal-400 flex flex-col justify-between p-3 custom-shadow neon-border-teal">
+            <span class="text-left text-[10px] font-bold text-teal-400 text-teal-force">Chemistry</span>
+            <span class="text-3xl font-black tracking-widest text-light-force text-center w-full block">Ch</span>
+            <span class="text-center text-[10px] text-slate-400 text-slate-400-force">Quiz Game</span>
+          </div>
+          <span class="absolute -top-3 -right-3 text-2xl">✨</span>
+          <span class="absolute -bottom-3 -left-3 text-2xl font-bold text-yellow-400">💡</span>
+        </div>
+      </div>
+
+      <div class="space-y-1.5 w-full">
+        <h2 class="text-2xl sm:text-2xl font-black text-white text-light-force tracking-wide">
+          理科がもっと楽しくなる！難易度別クイズ
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300 text-light-force px-4 leading-relaxed opacity-90 max-w-xl mx-auto">
+          元素記号や専門化学式をマスターしよう！お好みの「クイズモード」と「難易度」を選んで、「挑戦スタート！」をクリックしてください。
+        </p>
+      </div>
+
+      <!-- モード選択 & 難易度選択ダッシュボード -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 w-full p-6 bg-slate-900/60 rounded-2xl border border-slate-800/80 custom-shadow">
+        
+        <!-- 左側：クイズモード選択 (7列分) -->
+        <div class="md:col-span-7 space-y-3 text-left">
+          <h3 class="text-sm font-extrabold text-teal-400 text-teal-force border-l-4 border-teal-400 pl-2">
+            1. クイズモードを選ぶ
+          </h3>
+          <div class="space-y-2" id="modeSelectContainer">
+            
+            <!-- 記号→名前 -->
+            <button onclick="selectMode('symToName')" id="btn-mode-symToName" class="w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between group bg-slate-950/40 border-slate-800 hover:border-slate-700">
+              <div class="flex items-center gap-3">
+                <span class="text-lg">🧐</span>
+                <span class="text-light-force font-bold text-xs sm:text-sm">記号 ➜ 元素名</span>
+              </div>
+              <span class="text-[10px] text-slate-400 text-slate-400-force">H は何の元素？</span>
+            </button>
+
+            <!-- 名前→記号 -->
+            <button onclick="selectMode('nameToSym')" id="btn-mode-nameToSym" class="w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between group bg-slate-950/40 border-slate-800 hover:border-slate-700">
+              <div class="flex items-center gap-3">
+                <span class="text-lg">🔤</span>
+                <span class="text-light-force font-bold text-xs sm:text-sm">元素名 ➜ 記号</span>
+              </div>
+              <span class="text-[10px] text-slate-400 text-slate-400-force">水素 の記号は？</span>
+            </button>
+
+            <!-- 原子番号→名前 (超高難度・新モード) -->
+            <button onclick="selectMode('numToName')" id="btn-mode-numToName" class="w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between group bg-slate-950/40 border-slate-800 hover:border-slate-700">
+              <div class="flex items-center gap-3">
+                <span class="text-lg">👑</span>
+                <span class="text-light-force font-bold text-xs sm:text-sm">原子番号 ➜ 元素名 <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-extrabold shrink-0 ml-1">超高難度</span></span>
+              </div>
+              <span class="text-[10px] text-slate-400 text-slate-400-force">原子番号 6 はどれ？</span>
+            </button>
+
+            <!-- 化学式→物質名 -->
+            <button onclick="selectMode('formToSub')" id="btn-mode-formToSub" class="w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between group bg-slate-950/40 border-slate-800 hover:border-slate-700">
+              <div class="flex items-center gap-3">
+                <span class="text-lg">🔬</span>
+                <span class="text-light-force font-bold text-xs sm:text-sm">化学式 ➜ 物質名</span>
+              </div>
+              <span class="text-[10px] text-slate-400 text-slate-400-force">C₆H₅OH は何の物質？</span>
+            </button>
+
+            <!-- 物質名→化学式 -->
+            <button onclick="selectMode('subToForm')" id="btn-mode-subToForm" class="w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between group bg-slate-950/40 border-slate-800 hover:border-slate-700">
+              <div class="flex items-center gap-3">
+                <span class="text-lg">🧪</span>
+                <span class="text-light-force font-bold text-xs sm:text-sm">物質名 ➜ 化学式</span>
+              </div>
+              <span class="text-[10px] text-slate-400 text-slate-400-force">酢酸 の化学式は？</span>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- 右側：難易度選択 (5列分) -->
+        <div class="md:col-span-5 space-y-3 text-left flex flex-col justify-between">
+          <div class="space-y-3">
+            <h3 class="text-sm font-extrabold text-teal-400 text-teal-force border-l-4 border-teal-400 pl-2">
+              2. 難易度を選ぶ
+            </h3>
+            <div class="grid grid-cols-1 gap-2" id="difficultySelectContainer">
+              
+              <!-- 初級 -->
+              <button onclick="selectDifficulty('easy')" id="btn-diff-easy" class="w-full p-2.5 text-left rounded-xl border transition-all flex items-center justify-between bg-slate-950/40 border-slate-800">
+                <div class="space-y-0.5">
+                  <span class="text-light-force font-bold text-xs sm:text-sm block">🟢 初級 (Easy)</span>
+                  <span class="text-[9px] text-slate-400 text-slate-400-force">身近な元素や化学式 (H, O, H₂Oなど)</span>
+                </div>
+              </button>
+
+              <!-- 中級 -->
+              <button onclick="selectDifficulty('normal')" id="btn-diff-normal" class="w-full p-2.5 text-left rounded-xl border transition-all flex items-center justify-between bg-slate-950/40 border-slate-800">
+                <div class="space-y-0.5">
+                  <span class="text-light-force font-bold text-xs sm:text-sm block">🟡 中級 (Normal)</span>
+                  <span class="text-[9px] text-slate-400 text-slate-400-force">教科書で定番のレベル (Li, NaOHなど)</span>
+                </div>
+              </button>
+
+              <!-- 上級 -->
+              <button onclick="selectDifficulty('hard')" id="btn-diff-hard" class="w-full p-2.5 text-left rounded-xl border transition-all flex items-center justify-between bg-slate-950/40 border-slate-800">
+                <div class="space-y-0.5">
+                  <span class="text-light-force font-bold text-xs sm:text-sm block">🔴 上級 (Hard)</span>
+                  <span class="text-[9px] text-slate-400 text-slate-400-force">大学・専門・新元素 (Nh, アスピリンなど)</span>
+                </div>
+              </button>
+
+              <!-- 全ミックス -->
+              <button onclick="selectDifficulty('all')" id="btn-diff-all" class="w-full p-2.5 text-left rounded-xl border transition-all flex items-center justify-between bg-slate-950/40 border-slate-800">
+                <div class="space-y-0.5">
+                  <span class="text-light-force font-bold text-xs sm:text-sm block">🌀 全難易度ミックス</span>
+                  <span class="text-[9px] text-slate-400 text-slate-400-force">すべてのデータから完全ランダム出題！</span>
+                </div>
+              </button>
+
+            </div>
+          </div>
+
+          <!-- クイズ開始ボタン -->
+          <button onclick="pressStartQuiz()" class="w-full bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-500 hover:to-blue-600 font-extrabold py-3.5 rounded-xl text-sm sm:text-base hover-trigger active-scale transition-all shadow-lg border border-teal-400/20 text-slate-950 text-dark-force mt-4">
+            🚀 この設定でクイズに挑戦！
+          </button>
+        </div>
+
+      </div>
+
+      <!-- クイックデータ -->
+      <div class="flex justify-around text-slate-400 text-slate-400-force text-sm pt-2 w-full max-w-md mx-auto">
+        <div>
+          <span class="block text-xl font-bold text-slate-200 text-light-force" id="highScoreText">0問</span>
+          最高スコア (20問中)
+        </div>
+        <div class="border-r border-slate-800 w-px"></div>
+        <div>
+          <span class="block text-xl font-bold text-slate-200 text-light-force" id="playedCountText">0回</span>
+          全挑戦回数
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. クイズプレイ画面 -->
+    <section id="quizSection" class="w-full hidden space-y-6">
+      <!-- プログレスバー & カウンター -->
+      <div class="space-y-2">
+        <div class="flex justify-between items-center text-sm">
+          <span class="text-slate-400 text-slate-400-force font-bold">進行度: <strong id="currentQuestionNum" class="text-teal-400 text-teal-force">1</strong> / 20 問</span>
+          <span class="text-slate-400 text-slate-400-force font-bold">正解数: <strong id="currentScore" class="text-green-400 text-teal-force">0</strong></span>
+        </div>
+        <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden">
+          <div id="progressBar" class="bg-gradient-to-r from-teal-400 via-blue-400 to-indigo-500 h-full transition-all duration-355" style="width: 5%"></div>
+        </div>
+      </div>
+
+      <!-- お題カード -->
+      <div class="bg-slate-950/80 rounded-2xl border-2 border-slate-700/40 p-8 text-center relative overflow-hidden custom-shadow flex flex-col items-center justify-center min-h-[180px] sm:min-h-[220px] isolate" id="questionCard">
+        <!-- 背景の大きな透かし元素記号 -->
+        <div id="cardWatermark" class="absolute bottom-3 right-6 text-7xl sm:text-8xl font-black text-slate-800/10 select-none pointer-events-none z-0"></div>
+
+        <!-- お題内容 -->
+        <div class="relative z-10 space-y-2">
+          <span class="text-xs text-teal-400 text-teal-force font-bold uppercase tracking-widest block" id="questionLabel">この元素のなまえは？</span>
+          <h2 class="text-4xl sm:text-5xl font-black tracking-wide text-slate-50 text-light-force" id="questionMainText">H</h2>
+          <span class="text-xs text-slate-400 text-slate-400-force block" id="questionSubInfo">原子番号: 1 | 周期表: 第1周期</span>
+        </div>
+
+        <!-- 正解・不正解のオーバーレイ表示 -->
+        <div id="resultOverlay" class="absolute inset-0 rounded-2xl flex items-center justify-center opacity-0 pointer-events-none transition-all duration-200 z-20">
+          <div id="resultOverlayIcon" class="text-7xl sm:text-8xl transform scale-50 transition-all duration-300"></div>
+        </div>
+      </div>
+
+      <!-- 4択ボタン -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="optionsContainer">
+        <!-- 動的にボタンが生成されます -->
+      </div>
+
+      <!-- 解説 & 次へボタン -->
+      <div id="explanationContainer" class="hidden transform scale-95 opacity-0 transition-all duration-300 bg-slate-900/95 border-2 border-slate-700/60 rounded-2xl p-5 space-y-4 shadow-xl">
+        <div class="flex items-start gap-4">
+          <span class="text-3xl mt-1" id="expEmoji">💡</span>
+          <div class="space-y-1.5 min-w-0 flex-grow">
+            <h4 class="text-sm font-bold text-slate-200 text-light-force flex items-center gap-2 flex-wrap">
+              <span id="expTitle" class="truncate text-white text-light-force text-base">元素解説</span>
+              <span id="expCategory" class="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-teal-400 text-teal-force shrink-0 font-bold">非金属</span>
+            </h4>
+            <p id="expText" class="text-sm text-slate-300 text-light-force leading-relaxed opacity-90">
+              解説テキストがここに入ります。
+            </p>
+          </div>
+        </div>
+        <button onclick="nextQuestion()" class="w-full bg-slate-200 hover:bg-white p-3 rounded-xl text-sm sm:text-base hover-trigger transition-all flex items-center justify-center gap-2 border border-slate-300/20 shadow-lg">
+          <span class="text-dark-force font-extrabold">次の問題へ進む</span>
+          <i class="fa-solid fa-arrow-right text-sm text-dark-force"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- 3. リザルト・お祝い画面 -->
+    <section id="resultSection" class="w-full hidden text-center space-y-6 py-4">
+      <div class="relative">
+        <svg id="confettiSvg" class="absolute inset-0 w-full h-56 pointer-events-none overflow-visible -top-16" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="floating inline-block text-6xl sm:text-7xl mb-1" id="resultEmoji">🎉</div>
+      </div>
+
+      <div class="space-y-1.5">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white text-light-force" id="resultTitle">
+          素晴らしい！合格！
+        </h2>
+        <p class="text-sm text-slate-400 text-slate-400-force" id="resultSub">
+          全問正解！あなたは元素マスターです！
+        </p>
+      </div>
+
+      <!-- スコア表示サークル -->
+      <div class="w-40 h-40 sm:w-48 sm:h-48 rounded-full border-4 border-dashed border-teal-400 flex flex-col items-center justify-center mx-auto custom-shadow bg-slate-900/80 relative">
+        <span class="text-xs text-slate-400 text-slate-400-force uppercase tracking-widest font-bold">スコア</span>
+        <div class="text-4xl sm:text-5xl font-black text-slate-100 text-light-force my-1">
+          <span id="finalScore" class="text-teal-400 text-teal-force">20</span><span class="text-2xl text-slate-400 text-slate-400-force">/20</span>
+        </div>
+        <span class="text-xs px-2.5 py-1 bg-teal-500/20 text-teal-300 text-teal-force rounded-full font-bold" id="scoreEvaluation">パーフェクト！</span>
+      </div>
+
+      <!-- アクションボタン -->
+      <div class="space-y-3 px-4 max-w-sm mx-auto">
+        <button onclick="restartGame()" class="w-full bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-500 hover:to-blue-600 font-extrabold py-3.5 rounded-xl text-sm sm:text-base hover-trigger transition-all shadow-lg border border-teal-400/20">
+          <i class="fa-solid fa-rotate-left mr-1 text-dark-force"></i><span class="text-dark-force">もう一度遊ぶ</span>
+        </button>
+        <button onclick="goHome()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-3 rounded-xl text-sm sm:text-base hover-trigger transition-all border border-slate-700">
+          <i class="fa-solid fa-house mr-1 text-light-force"></i><span class="text-light-force">ホームに戻る</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 4. 学習図鑑画面 -->
+    <section id="encyclopediaSection" class="w-full hidden space-y-4">
+      <div class="flex justify-between items-center flex-wrap gap-2">
+        <div>
+          <h2 class="text-lg sm:text-xl font-bold text-white text-light-force flex items-center gap-2">
+            <i class="fa-solid fa-book text-teal-400 text-teal-force"></i> <span class="text-light-force">学習図鑑</span>
+          </h2>
+          <p class="text-xs text-slate-400 text-slate-400-force">
+            見つけた物質や元素をコレクション！クリックで詳細を学習できます。
+          </p>
+        </div>
+        <button onclick="goHome()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 text-light-force px-3 py-2 rounded-xl border border-slate-700">
+          ホームへ戻る
+        </button>
+      </div>
+
+      <!-- タブ切り替え -->
+      <div class="flex bg-slate-950/60 p-1.5 rounded-2xl border border-slate-800/80 gap-1.5">
+        <button id="tabElements" onclick="switchEncyclopediaTab('elements')" class="flex-1 text-center py-2 text-xs sm:text-sm font-bold rounded-xl transition-all bg-teal-500 text-slate-950 text-dark-force">
+          🧪 元素・単体 一覧
+        </button>
+        <button id="tabFormulas" onclick="switchEncyclopediaTab('formulas')" class="flex-1 text-center py-2 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-400 text-slate-400-force hover:bg-slate-900/50">
+          🔬 化合物・分子 一覧
+        </button>
+      </div>
+
+      <!-- フィルター・検索バー -->
+      <div class="flex gap-2">
+        <input type="text" id="searchBar" oninput="filterEncyclopedia()" placeholder="物質名や化学式、日本語で検索..." class="flex-grow bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-2 text-sm text-slate-200 text-light-force focus:outline-none focus:border-teal-400 placeholder-slate-500">
+        <select id="groupFilter" onchange="filterEncyclopedia()" class="bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-light-force focus:outline-none focus:border-teal-400 shrink-0">
+          <option value="all" class="text-light-force bg-slate-900">すべて</option>
+          <option value="非金属" class="text-light-force bg-slate-900">非金属</option>
+          <option value="希ガス" class="text-light-force bg-slate-900">希ガス</option>
+          <option value="アルカリ金属" class="text-light-force bg-slate-900">アルカリ金属</option>
+          <option value="アルカリ土類金属" class="text-light-force bg-slate-900">アルカリ土類金属</option>
+          <option value="遷移金属" class="text-light-force bg-slate-900">遷移金属</option>
+          <option value="その他の金属" class="text-light-force bg-slate-900">その他の金属</option>
+          <option value="半金属" class="text-light-force bg-slate-900">半金属</option>
+          <option value="ハロゲン" class="text-light-force bg-slate-900">ハロゲン</option>
+          <option value="単体" class="text-light-force bg-slate-900">単体（分子）</option>
+          <option value="化合物" class="text-light-force bg-slate-900">化合物</option>
+        </select>
+      </div>
+
+      <!-- 図鑑グリッド -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 overflow-y-auto max-h-[50vh] pr-1" id="encyclopediaGrid">
+        <!-- JavaScriptで動的にカードを生成 -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- フッター -->
+  <footer class="w-full max-w-3xl mx-auto text-center text-xs text-slate-600 py-3 border-t border-slate-800/40 shrink-0">
+    <p>© 2026 元素記号＆化学式クイズマスター.</p>
+  </footer>
+
+  <!-- カスタムダイアログ -->
+  <div id="customModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-900 border border-slate-700 p-6 rounded-2xl w-full max-w-sm text-center space-y-4 custom-shadow transform scale-95 transition-all">
+      <div class="text-4xl" id="modalEmoji">🎉</div>
+      <h3 class="text-lg font-bold text-white text-light-force" id="modalTitle">タイトル</h3>
+      <div class="text-sm text-slate-300 text-light-force leading-relaxed" id="modalMessage">メッセージ</div>
+      <button onclick="closeModal()" class="w-full bg-teal-500 hover:bg-teal-600 font-bold py-2.5 rounded-xl text-sm transition-all border border-teal-400/20 shadow-lg">
+        <span class="text-dark-force font-extrabold">閉じる</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // 🎛️ 1. 元素データ（34種類）
+    // difficulty: 1 (Easy/初級), 2 (Normal/中級), 3 (Hard/上級)
+    const ELEMENTS = [
+      { num: 1, symbol: "H", name: "水素", english: "Hydrogen", group: "非金属", difficulty: 1, desc: "宇宙で最も多く存在する最も軽い元素。水や様々な有機物の構成成分。" },
+      { num: 2, symbol: "He", name: "ヘリウム", english: "Helium", group: "希ガス", difficulty: 1, desc: "２番目に軽い非常に安定した気体。風船のガスや超低温冷却に使われます。" },
+      { num: 3, symbol: "Li", name: "リチウム", english: "Lithium", group: "アルカリ金属", difficulty: 2, desc: "最も軽い金属。スマホや電気自動車のバッテリーとして大活躍。" },
+      { num: 4, symbol: "Be", name: "ベリリウム", english: "Beryllium", group: "アルカリ土類金属", difficulty: 3, desc: "軽くて非常に硬い金属。宇宙望遠鏡のミラーなどに使われます。" },
+      { num: 5, symbol: "B", name: "ホウ素", english: "Boron", group: "半金属", difficulty: 2, desc: "ガラスの耐熱性を高めるのに使われるほか、目の消毒液（ホウ酸）にも利用。" },
+      { num: 6, symbol: "C", name: "炭素", english: "Carbon", group: "非金属", difficulty: 1, desc: "生命を形作る基礎。ダイヤモンドやえんぴつの芯、炭素繊維もこれです。" },
+      { num: 7, symbol: "N", name: "窒素", english: "Nitrogen", group: "非金属", difficulty: 1, desc: "空気の約78％を占める無色無臭の気体。ポテトチップスの酸化防止袋にも充填。" },
+      { num: 8, symbol: "O", name: "酸素", english: "Oxygen", group: "非金属", difficulty: 1, desc: "生命の呼吸に不可欠な気体。空気の約21％を占め、水を作る重要な要素。" },
+      { num: 9, symbol: "F", name: "フッ素", english: "Fluorine", group: "ハロゲン", difficulty: 2, desc: "虫歯予防の歯磨き粉や、フライパンの焦げ付き防止テフロン加工でお馴染み。" },
+      { num: 10, symbol: "Ne", name: "ネオン", english: "Neon", group: "希ガス", difficulty: 2, desc: "高電圧で赤く美しく光るため、街のネオンサインとして広く使われます。" },
+      { num: 11, symbol: "Na", name: "ナトリウム", english: "Sodium", group: "アルカリ金属", difficulty: 1, desc: "食塩（塩化ナトリウム）の構成元素。水と激しく反応する非常に柔らかい金属。" },
+      { num: 12, symbol: "Mg", name: "マグネシウム", english: "Magnesium", group: "アルカリ土類金属", difficulty: 1, desc: "軽くて丈夫な合金の材料。私たちの体（酵素の働きなど）にも必須のミネラル。" },
+      { num: 13, symbol: "Al", name: "アルミニウム", english: "Aluminium", group: "その他の金属", difficulty: 1, desc: "軽くて加工しやすく錆びにくい。一円玉やアルミホイル、飲料缶に不可欠。" },
+      { num: 14, symbol: "Si", name: "ケイ素", english: "Silicon", group: "半金属", difficulty: 2, desc: "半導体の主材料としてコンピュータチップに使われる、デジタル社会の心臓。" },
+      { num: 15, symbol: "P", name: "リン", english: "Phosphorus", group: "非金属", difficulty: 2, desc: "マッチの頭薬や肥料に使われる。遺伝子(DNA)や骨を構成する重要元素。" },
+      { num: 16, symbol: "S", name: "硫黄", english: "Sulfur", group: "非金属", difficulty: 1, desc: "温泉地特有の匂いで知られる黄色い非金属。ゴムの強度を上げる際にも使われます。" },
+      { num: 17, symbol: "Cl", name: "塩素", english: "Chlorine", group: "ハロゲン", difficulty: 1, desc: "強い殺菌作用を持ち、プールの消毒や水道水の浄化、漂白剤に使われます。" },
+      { num: 18, symbol: "Ar", name: "アルゴン", english: "Argon", group: "希ガス", difficulty: 2, desc: "空気中に３番目に多く含まれる。電球の中に封入したり、溶接の保護用ガスとして活躍。" },
+      { num: 19, symbol: "K", name: "カリウム", english: "Potassium", group: "アルカリ金属", difficulty: 2, desc: "植物の肥料（三要素の一つ）や、私たちの体液バランスを保つ超重要な金属元素。" },
+      { num: 20, symbol: "Ca", name: "カルシウム", english: "Calcium", group: "アルカリ土類金属", difficulty: 1, desc: "骨や歯の主成分として有名。牛乳や小魚に多く含まれる大切なミネラル。" },
+      { num: 22, symbol: "Ti", name: "チタン", english: "Titanium", group: "遷移金属", difficulty: 2, desc: "軽くて鋼鉄並みに強く、かつ金属アレルギーを起こしにくいため人工関節等に採用。" },
+      { num: 26, symbol: "Fe", name: "鉄", english: "Iron", group: "遷移金属", difficulty: 1, desc: "文明の象徴。地球で最も利用されている金属で、血液中で酸素を運ぶ役割も担う。" },
+      { num: 29, symbol: "Cu", name: "銅", english: "Copper", group: "遷移金属", difficulty: 1, desc: "電気を非常によく通す。電線や十円硬貨、調理器具など広く使われます。" },
+      { num: 30, symbol: "Zn", name: "亜鉛", english: "Zinc", group: "遷移金属", difficulty: 2, desc: "トタン板のメッキや真鍮（ブラス）の合金材、サプリメントの必須ミネラルとして活躍。" },
+      { num: 47, symbol: "Ag", name: "銀", english: "Silver", group: "遷移金属", difficulty: 1, desc: "金属の中で最も電気や熱を通し、可視光をよく反射。アクセサリーや鏡の裏に。" },
+      { num: 50, symbol: "Sn", name: "スズ", english: "Tin", group: "その他の金属", difficulty: 3, desc: "毒性が低く、青銅器時代から使われる。缶詰の内側メッキ（ブリキ）やハンダに。" },
+      { num: 53, symbol: "I", name: "ヨウ素", english: "Iodine", group: "ハロゲン", difficulty: 2, desc: "うがい薬や傷口の消毒液（赤チン等）に使われる。昆布やワカメに多く含まれます。" },
+      { num: 54, symbol: "Xe", name: "キセノン", english: "Xenon", group: "希ガス", difficulty: 3, desc: "高輝度放電灯やカメラのフラッシュ、イオンエンジン推進薬に使われる稀少なガス。" },
+      { num: 74, symbol: "W", name: "タングステン", english: "Tungsten", group: "遷移金属", difficulty: 3, desc: "全金属の中で最も融点（溶ける温度）が高く、電球のフィラメントや重金属工具に。" },
+      { num: 78, symbol: "Pt", name: "白金", english: "Platinum", group: "遷移金属", difficulty: 2, desc: "プラチナ。非常に安定して錆びず、宝飾品としての他、車の排ガス浄化触媒に必須。" },
+      { num: 79, symbol: "Au", name: "金", english: "Gold", group: "遷移金属", difficulty: 1, desc: "古来より富の象徴。極めて薄く伸ばすことができ、錆びない。電子部品の接点にも。" },
+      { num: 80, symbol: "Hg", name: "水銀", english: "Mercury", group: "遷移金属", difficulty: 2, desc: "常温で唯一の『液体』である金属. 体温計や蛍光灯の歴史に関わってきました。" },
+      { num: 82, symbol: "Pb", name: "鉛", english: "Lead", group: "その他の金属", difficulty: 2, desc: "重く柔らかい金属。遮蔽（放射線を防ぐ）能力が高いため医療用防護服などに。" },
+      { num: 113, symbol: "Nh", name: "ニホニウム", english: "Nihonium", group: "その他の金属", difficulty: 3, desc: "日本で発見され命名された新元素。非常に重く不安定なためすぐ崩壊します。" }
+    ];
+
+    // 🔬 2. 専門・大学レベルの化学式データ（30種類）
+    // difficulty: 1 (Easy/初級), 2 (Normal/中級), 3 (Hard/上級)
+    const FORMULAS = [
+      { num: 1, symbol: "H2O", name: "水", english: "Water", group: "化合物", difficulty: 1, desc: "水素と酸素が2:1の割合で結合した、生命の維持に絶対不可欠な液体。" },
+      { num: 2, symbol: "CO2", name: "二酸化炭素", english: "Carbon Dioxide", group: "化合物", difficulty: 1, desc: "炭素が完全燃焼すると発生する気体。地球温暖化ガスとしても注目されています。" },
+      { num: 3, symbol: "NaCl", name: "塩化ナトリウム", english: "Sodium Chloride", group: "化合物", difficulty: 1, desc: "食塩の主成分。体内の水分バランスや筋肉の働きを正常に保つために必須。" },
+      { num: 4, symbol: "NH3", name: "アンモニア", english: "Ammonia", group: "化合物", difficulty: 1, desc: "強い刺激臭を持つ無色の気体。水に溶かすとアルカリ性を示し、肥料などに使用。" },
+      { num: 5, symbol: "HCl", name: "塩化水素", english: "Hydrogen Chloride", group: "化合物", difficulty: 1, desc: "気体は塩化水素。これを水に溶かした水溶液は「塩酸」と呼ばれ胃液にも配合されています。" },
+      { num: 6, symbol: "O2", name: "酸素分子", english: "Oxygen Gas", group: "単体", difficulty: 1, desc: "空気中に約21％含まれ、生物が呼吸して体内でエネルギーを作るのに使う気体。" },
+      { num: 7, symbol: "H2", name: "水素分子", english: "Hydrogen Gas", group: "単体", difficulty: 1, desc: "単体分子としては宇宙で最も軽くて燃えやすい気体。クリーンエネルギーとしても大注目。" },
+      { num: 8, symbol: "N2", name: "窒素分子", english: "Nitrogen Gas", group: "単体", difficulty: 1, desc: "空気の約78％を占める無色無臭の気体。非常に安定しており食品の酸化防止用ガスとしてポテチ of 袋等に利用。" },
+      { num: 9, symbol: "CO", name: "一酸化炭素", english: "Carbon Monoxide", group: "化合物", difficulty: 1, desc: "有機物が不完全燃焼すると生じる、非常に有毒な無色無臭の気体。酸素を運ぶ赤血球の働きを強力に阻害します。" },
+      { num: 10, symbol: "NaHCO3", name: "炭酸水素ナトリウム", english: "Sodium Hydrogen Carbonate", group: "化合物", difficulty: 1, desc: "重曹。お掃除用や、加熱するとCO2を放出して膨らむふくらし粉（ベーキングパウダー）として家庭でも活躍。" },
+      { num: 11, symbol: "NaOH", name: "水酸化ナトリウム", english: "Sodium Hydroxide", group: "化合物", difficulty: 2, desc: "別名「苛性ソーダ」。二酸化炭素を強力に吸収する強塩基の代表格。石鹸製造や工業原料に必須。" },
+      { num: 12, symbol: "H2SO4", name: "硫酸", english: "Sulfuric Acid", group: "化合物", difficulty: 2, desc: "きわめて強力な脱水作用と酸化作用をもつ不揮発性の酸。世界の工業生産力を測る指標としても重視されてきました。" },
+      { num: 13, symbol: "CH3COOH", name: "酢酸", english: "Acetic Acid", group: "化合物", difficulty: 2, desc: "食酢に含まれるすっぱい成分。強い酸味とツンとする特有の刺激臭をもちます。有機合成の重要な原料。" },
+      { num: 14, symbol: "CaCO3", name: "炭酸カルシウム", english: "Calcium Carbonate", group: "化合物", difficulty: 2, desc: "大理石やチョーク、貝殻、卵の殻などの主成分。熱すると熱分解して二酸化炭素を発生します。" },
+      { num: 15, symbol: "CH4", name: "メタン", english: "Methane", group: "化合物", difficulty: 2, desc: "天然ガスの主成分。最も単純な構造をもつ有機化合物で、強力な温室効果ガスでもあります。" },
+      { num: 16, symbol: "CuO", name: "酸化銅", english: "Copper Oxide", group: "化合物", difficulty: 2, desc: "銅を空気中で加熱（酸化）することで生じる、黒色の物質。水素を通すと還元されて銅に戻ります。" },
+      { num: 17, symbol: "MgO", name: "酸化マグネシウム", english: "Magnesium Oxide", group: "化合物", difficulty: 2, desc: "マグネシウムを強力に燃焼させると眩しい光と共に生じる白色の物質。便秘薬や耐火レンガに使用。" },
+      { num: 18, symbol: "Ag2O", name: "酸化銀", english: "Silver Oxide", group: "化合物", difficulty: 2, desc: "暗褐色の固体粉末。加熱するだけで銀と酸素に熱分解する（熱分解実験の定番）性質があります。" },
+      { num: 19, symbol: "CuSO4", name: "硫酸銅", english: "Copper Sulfate", group: "化合物", difficulty: 2, desc: "美しい青色の結晶を作る化合物。水に溶かすと鮮やかな青色の水溶液（銅イオンの色）になります。" },
+      { num: 20, symbol: "H2O2", name: "過酸化水素", english: "Hydrogen Peroxide", group: "化合物", difficulty: 2, desc: "強力な酸化力をもつ液体。3%水溶液はオキシドールとして消毒用に、高濃度品はロケット推進薬に使われます。" },
+      { num: 21, symbol: "C6H5OH", name: "フェノール", english: "Phenol", group: "化合物", difficulty: 3, desc: "ベンゼン環にヒドロキシ基がついた最も基本的なフェノール類。弱酸性を示し、医薬品やプラスチックの原料になります。" },
+      { num: 22, symbol: "C6H5NH2", name: "アニリン", english: "Aniline", group: "化合物", difficulty: 3, desc: "代表的な芳香族アミン。弱塩基性を示し、衣服の染料（インディゴなど）や合成医薬品の製造に不可欠な素材です。" },
+      { num: 23, symbol: "C6H5NO2", name: "ニトロベンゼン", english: "Nitrobenzene", group: "化合物", difficulty: 3, desc: "ベンゼンを混酸でニトロ化して得られる、特異な杏仁（アーモンド）の香りがする黄色い油状液体。アニリンの原料。" },
+      { num: 24, symbol: "H2NCH2COOH", name: "グリシン", english: "Glycine", group: "化合物", difficulty: 3, desc: "最も単純な構造を持つ、光学異性体の存在しないアミノ酸。甘みがあり食品添加物や調味料にも使われます。" },
+      { num: 25, symbol: "C6H12O6", name: "グルコース", english: "Glucose", group: "化合物", difficulty: 3, desc: "ブドウ糖とも呼ばれる最も代表的な単糖。光合成によって作られ、生物の細胞呼吸の中核エネルギー源となります。" },
+      { num: 8, symbol: "C6H4(OCOCH3)COOH", name: "アセチルサリチル酸", english: "Acetylsalicylic Acid", group: "化合物", difficulty: 3, desc: "別名「アスピリン」。サリチル酸をアセチル化して作られる、100年以上愛用されている代表的な解熱鎮痛剤。" },
+      { num: 9, symbol: "C8H10N4O2", name: "カフェイン", english: "Caffeine", group: "化合物", difficulty: 3, desc: "コーヒーや茶に含まれるプリンアルカロイド。脳内の中枢神経に働いて眠気を抑える覚醒作用をもちます。" },
+      { num: 10, symbol: "C3H5(ONO2)3", name: "ニトログリセリン", english: "Nitroglycerin", group: "化合物", difficulty: 3, desc: "ノーベルが発明したダイナマイトの原料。心臓医療においては、血管を拡張して狭心症の発作を止める特効薬です。" },
+      { num: 6, symbol: "K4[Fe(CN)6]", name: "ヘキサシアニド鉄(II)酸カリウム", english: "Potassium Ferrocyanide", group: "化合物", difficulty: 3, desc: "「黄血塩」とも呼ばれる錯化合物。鉄(III)イオンと出会うと美しく濃い青色（ベルリン青）に変色する検出試薬。" },
+      { num: 7, symbol: "C6H4(OH)COOH", name: "サリチル酸", english: "Salicylic Acid", group: "化合物", difficulty: 3, desc: "消炎鎮痛作用をもつ芳香族カルボン酸。アスピリン（解熱薬）やサリチル酸メチル（湿布薬）の合成原料。" }
+    ];
+
+    // 🌐 アプリの状態管理
+    let gameState = {
+      score: 0,
+      currentIdx: 0,
+      mode: 'symToName', // 'symToName' | 'nameToSym' | 'numToName' | 'formToSub' | 'subToForm'
+      difficulty: 'easy', // 'easy' | 'normal' | 'hard' | 'all'
+      currentDataset: [], // クイズで使う対象データ（ELEMENTS または FORMULAS）
+      questions: [],     // 今回の20問の配列
+      soundEnabled: true,
+      answered: false,   
+      seenElements: new Set(),
+      seenFormulas: new Set(),
+      currentTab: 'elements' // 図鑑のタブ：'elements' | 'formulas'
+    };
+
+    // 📝 化学式の数字を自動で下付き文字（Subscript）タグに書き換える関数
+    function formatFormula(str) {
+      return str.replace(/(\d+)/g, '<sub>$1</sub>');
+    }
+
+    // 🔊 サウンド（簡易Web Audio APIによるシンセ効果音）
+    function playSound(type) {
+      if (!gameState.soundEnabled) return;
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        const now = ctx.currentTime;
+
+        if (type === 'correct') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.setValueAtTime(659.25, now + 0.08);
+          osc.frequency.setValueAtTime(783.99, now + 0.16);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } else if (type === 'wrong') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(140, now);
+          osc.frequency.linearRampToValueAtTime(90, now + 0.25);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else if (type === 'click') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(800, now);
+          gain.gain.setValueAtTime(0.04, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.04);
+          osc.start(now);
+          osc.stop(now + 0.04);
+        } else if (type === 'congrats') {
+          const notes = [261.63, 329.63, 392.00, 523.25];
+          notes.forEach((freq, idx) => {
+            const individualOsc = ctx.createOscillator();
+            const individualGain = ctx.createGain();
+            individualOsc.connect(individualGain);
+            individualGain.connect(ctx.destination);
+            
+            individualOsc.type = 'triangle';
+            individualOsc.frequency.setValueAtTime(freq, now + idx * 0.12);
+            individualGain.gain.setValueAtTime(0.08, now + idx * 0.12);
+            individualGain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.12 + 0.35);
+            individualOsc.start(now + idx * 0.12);
+            individualOsc.stop(now + idx * 0.12 + 0.35);
+          });
+        }
+      } catch (e) {
+        console.log("AudioContext blocked or not supported");
+      }
+    }
+
+    // 🔄 初期化 & 起動
+    window.onload = function() {
+      const storedHighScore = localStorage.getItem('element_high_score') || '0';
+      const storedPlayed = localStorage.getItem('element_played_count') || '0';
+      
+      const storedSeenE = localStorage.getItem('element_seen');
+      if (storedSeenE) gameState.seenElements = new Set(JSON.parse(storedSeenE));
+
+      const storedSeenF = localStorage.getItem('formula_seen');
+      if (storedSeenF) gameState.seenFormulas = new Set(JSON.parse(storedSeenF));
+
+      document.getElementById('highScoreText').innerText = `${storedHighScore}問`;
+      document.getElementById('playedCountText').innerText = `${storedPlayed}回`;
+
+      // ホーム画面の初期セット
+      selectMode('symToName');
+      selectDifficulty('easy');
+
+      goHome();
+      buildEncyclopedia();
+    };
+
+    function goHome() {
+      playSound('click');
+      showSection('home');
+    }
+
+    function toggleSound() {
+      gameState.soundEnabled = !gameState.soundEnabled;
+      const icon = document.getElementById('soundIcon');
+      if (gameState.soundEnabled) {
+        icon.className = 'fa-solid fa-volume-high text-light-force';
+        playSound('click');
+      } else {
+        icon.className = 'fa-solid fa-volume-xmark text-light-force';
+      }
+    }
+
+    function showSection(sectionId) {
+      document.getElementById('homeSection').classList.add('hidden');
+      document.getElementById('quizSection').classList.add('hidden');
+      document.getElementById('resultSection').classList.add('hidden');
+      document.getElementById('encyclopediaSection').classList.add('hidden');
+
+      if (sectionId === 'home') {
+        document.getElementById('homeSection').classList.remove('hidden');
+        document.getElementById('homeSection').classList.add('flex');
+      } else if (sectionId === 'quiz') {
+        document.getElementById('quizSection').classList.remove('hidden');
+      } else if (sectionId === 'result') {
+        document.getElementById('resultSection').classList.remove('hidden');
+      } else if (sectionId === 'encyclopedia') {
+        document.getElementById('encyclopediaSection').classList.remove('hidden');
+        buildEncyclopedia();
+      }
+    }
+
+    // ⚙️ モード選択
+    function selectMode(mode) {
+      playSound('click');
+      gameState.mode = mode;
+      
+      // 全ボタンのアクティブクラスをリセット
+      const modes = ['symToName', 'nameToSym', 'numToName', 'formToSub', 'subToForm'];
+      modes.forEach(m => {
+        const btn = document.getElementById(`btn-mode-${m}`);
+        if (btn) {
+          btn.className = "w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between group bg-slate-950/40 border-slate-800 hover:border-slate-700";
+        }
+      });
+
+      // 選択したボタンにハイライトを付与
+      const activeBtn = document.getElementById(`btn-mode-${mode}`);
+      if (activeBtn) {
+        activeBtn.className = "w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between group bg-gradient-to-r from-teal-500/20 to-indigo-500/10 border-teal-500 neon-border-blue";
+      }
+    }
+
+    // ⚙️ 難易度選択
+    function selectDifficulty(diff) {
+      playSound('click');
+      gameState.difficulty = diff;
+
+      // 全ボタンのアクティブクラスをリセット
+      const diffs = ['easy', 'normal', 'hard', 'all'];
+      diffs.forEach(d => {
+        const btn = document.getElementById(`btn-diff-${d}`);
+        if (btn) {
+          btn.className = "w-full p-2.5 text-left rounded-xl border transition-all flex items-center justify-between bg-slate-950/40 border-slate-800";
+        }
+      });
+
+      // 選択したボタンにハイライトを付与
+      const activeBtn = document.getElementById(`btn-diff-${diff}`);
+      if (activeBtn) {
+        activeBtn.className = "w-full p-2.5 text-left rounded-xl border transition-all flex items-center justify-between bg-gradient-to-r from-teal-500/20 to-indigo-500/10 border-teal-500 neon-border-blue";
+      }
+    }
+
+    // 🚀 クイズ開始（設定適用）
+    function pressStartQuiz() {
+      // 適切なデータプールを取得
+      if (gameState.mode === 'symToName' || gameState.mode === 'nameToSym' || gameState.mode === 'numToName') {
+        gameState.currentDataset = ELEMENTS;
+      } else {
+        gameState.currentDataset = FORMULAS;
+      }
+
+      // 難易度でデータをフィルタリングする
+      let filteredPool = [];
+      const diffMap = { 'easy': 1, 'normal': 2, 'hard': 3 };
+
+      if (gameState.difficulty === 'all') {
+        filteredPool = [...gameState.currentDataset];
+      } else {
+        const targetDiff = diffMap[gameState.difficulty];
+        filteredPool = gameState.currentDataset.filter(item => item.difficulty === targetDiff);
+      }
+
+      // 問題データ数が20問未満の場合、他の難易度からランダムに補填して20問にする
+      if (filteredPool.length < 20) {
+        const diffValues = Object.values(diffMap);
+        const currentDiffVal = diffMap[gameState.difficulty] || 0;
+        
+        // 足りない問題数
+        const needed = 20 - filteredPool.length;
+        
+        // 補填用の候補プール（現在難易度以外の全データ）
+        const fallbackCandidates = gameState.currentDataset.filter(item => item.difficulty !== currentDiffVal);
+        const shuffledFallback = fallbackCandidates.sort(() => 0.5 - Math.random());
+        
+        // マージして20問確保
+        filteredPool = filteredPool.concat(shuffledFallback.slice(0, needed));
+      }
+
+      // クイズ開始の初期化
+      gameState.score = 0;
+      gameState.currentIdx = 0;
+      gameState.answered = false;
+
+      // ランダムに並び替えて20問に制限
+      gameState.questions = filteredPool.sort(() => 0.5 - Math.random()).slice(0, 20);
+
+      // 挑戦回数の加算
+      let playedCount = parseInt(localStorage.getItem('element_played_count') || '0');
+      playedCount++;
+      localStorage.setItem('element_played_count', playedCount.toString());
+      document.getElementById('playedCountText').innerText = `${playedCount}回`;
+
+      showSection('quiz');
+      loadQuestion();
+    }
+
+    // 📝 クイズ問題の読み込み
+    function loadQuestion() {
+      gameState.answered = false;
+      document.getElementById('explanationContainer').classList.add('hidden');
+      document.getElementById('explanationContainer').classList.add('scale-95', 'opacity-0');
+      
+      const currentElement = gameState.questions[gameState.currentIdx];
+      
+      // 図鑑解放の判定＆保存
+      if (gameState.currentDataset === ELEMENTS) {
+        gameState.seenElements.add(currentElement.num);
+        localStorage.setItem('element_seen', JSON.stringify(Array.from(gameState.seenElements)));
+      } else {
+        gameState.seenFormulas.add(currentElement.num);
+        localStorage.setItem('formula_seen', JSON.stringify(Array.from(gameState.seenFormulas)));
+      }
+
+      // 進行状況の進捗表示
+      document.getElementById('currentQuestionNum').innerText = gameState.currentIdx + 1;
+      document.getElementById('currentScore').innerText = gameState.score;
+      const progressPercent = ((gameState.currentIdx + 1) / 20) * 100;
+      document.getElementById('progressBar').style.width = `${progressPercent}%`;
+
+      const overlay = document.getElementById('resultOverlay');
+      overlay.style.opacity = '0';
+      overlay.className = "absolute inset-0 rounded-2xl flex items-center justify-center opacity-0 pointer-events-none transition-all duration-200 z-20";
+
+      const qLabel = document.getElementById('questionLabel');
+      const qMain = document.getElementById('questionMainText');
+      const qSub = document.getElementById('questionSubInfo');
+      const watermark = document.getElementById('cardWatermark');
+
+      // 難易度バッジ表示用テキスト
+      const diffNames = { 1: "初級", 2: "中級", 3: "上級" };
+      const diffLabel = `<span class="px-1.5 py-0.5 rounded text-[10px] ml-1.5 font-bold ${currentElement.difficulty === 1 ? 'bg-emerald-500/20 text-emerald-400' : currentElement.difficulty === 2 ? 'bg-amber-500/20 text-amber-400' : 'bg-rose-500/20 text-rose-400'}">${diffNames[currentElement.difficulty]}</span>`;
+
+      // クイズモードごとの表示の分岐
+      if (gameState.mode === 'symToName') {
+        qLabel.innerHTML = `この 元素記号 のなまえは？ ${diffLabel}`;
+        qMain.innerHTML = currentElement.symbol;
+        qSub.innerText = `原子番号: ${currentElement.num} | 分類: ${currentElement.group}`;
+        watermark.innerText = currentElement.num;
+      } else if (gameState.mode === 'nameToSym') {
+        qLabel.innerHTML = `この 元素名 の記号はどれ？ ${diffLabel}`;
+        qMain.innerHTML = currentElement.name;
+        qSub.innerText = `原子番号: ${currentElement.num} | 分類: ${currentElement.group}`;
+        watermark.innerText = currentElement.symbol;
+      } else if (gameState.mode === 'numToName') {
+        qLabel.innerHTML = `この 原子番号 の元素はどれ？ ${diffLabel}`;
+        qMain.innerHTML = `<span class="text-xs sm:text-sm text-slate-400 block font-normal tracking-normal mb-1">原子番号</span>${currentElement.num}`;
+        qSub.innerText = `分類: ${currentElement.group}`;
+        watermark.innerText = currentElement.symbol;
+      } else if (gameState.mode === 'formToSub') {
+        qLabel.innerHTML = `この 化学式 が表す物質の名前は？ ${diffLabel}`;
+        qMain.innerHTML = formatFormula(currentElement.symbol);
+        qSub.innerText = `分類: ${currentElement.group} | 英語名: ${currentElement.english}`;
+        watermark.innerText = ""; // 化学式のときは透かしを非表示にして文字の重なりを防ぐ
+      } else if (gameState.mode === 'subToForm') {
+        qLabel.innerHTML = `この 物質 の化学式はどれ？ ${diffLabel}`;
+        qMain.innerHTML = currentElement.name;
+        qSub.innerText = `分類: ${currentElement.group} | 英語名: ${currentElement.english}`;
+        watermark.innerText = ""; // 化学式のときは透かしを非表示にして文字の重なりを防ぐ
+      }
+
+      buildOptions(currentElement);
+    }
+
+    // 📋 4択肢のボタンを生成する
+    function buildOptions(correctElement) {
+      const container = document.getElementById('optionsContainer');
+      container.innerHTML = '';
+
+      // 不正解候補の選出
+      const wrongCandidates = gameState.currentDataset.filter(el => el.num !== correctElement.num);
+      const shuffledWrongs = wrongCandidates.sort(() => 0.5 - Math.random()).slice(0, 3);
+      const finalChoices = [correctElement, ...shuffledWrongs].sort(() => 0.5 - Math.random());
+
+      // 原子番号バッジを表示するかどうか（元素モードのみ。ただし「原子番号 ➜ 元素名」クイズのときは選択肢に番号を出すと完全に答えになってしまうため非表示）
+      const isElementMode = (gameState.mode === 'symToName' || gameState.mode === 'nameToSym');
+
+      finalChoices.forEach(element => {
+        const button = document.createElement('button');
+        button.className = "w-full bg-slate-900/80 hover:bg-slate-800 border-2 border-slate-800 text-left p-4 rounded-xl active-scale hover-trigger transition-all flex items-center justify-between text-sm sm:text-base group font-medium text-slate-100 text-light-force custom-shadow";
+        button.setAttribute('data-num', element.num); // 識別のためのデータをボタンに格納
+
+        const textContent = document.createElement('div');
+        textContent.className = "flex items-center gap-3 min-w-0 flex-grow";
+        
+        // 「記号→名前」「名前→記号」のときのみ「？」の原子番号バッジを表示する
+        if (isElementMode) {
+          const badge = document.createElement('span');
+          badge.className = "badge-element w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800 group-hover:bg-slate-700 text-xs font-bold text-slate-400 shrink-0 text-slate-400-force";
+          badge.innerText = "?";
+          textContent.appendChild(badge);
+        }
+        
+        const labelText = document.createElement('span');
+        labelText.className = "text-slate-100 font-bold truncate text-light-force";
+        
+        // モードに合わせて選択肢を元素名/記号/物質名/化学式に切り替える
+        if (gameState.mode === 'symToName' || gameState.mode === 'formToSub' || gameState.mode === 'numToName') {
+          labelText.innerHTML = element.name;
+        } else {
+          // 記号または化学式モードの場合は、下付き文字処理を適用して出力
+          labelText.innerHTML = formatFormula(element.symbol);
+        }
+
+        textContent.appendChild(labelText);
+        button.appendChild(textContent);
+
+        const iconDiv = document.createElement('div');
+        iconDiv.className = "text-slate-500 transition-all shrink-0 ml-2 text-slate-400-force";
+        iconDiv.innerHTML = '<i class="fa-solid fa-chevron-right text-xs text-slate-400-force"></i>';
+        button.appendChild(iconDiv);
+
+        button.onclick = () => selectAnswer(element, button, correctElement);
+        container.appendChild(button);
+      });
+    }
+
+    // 👇 選択肢回答時のジャッジ
+    function selectAnswer(chosenElement, chosenButton, correctElement) {
+      if (gameState.answered) return;
+      gameState.answered = true;
+
+      const isCorrect = chosenElement.num === correctElement.num;
+      const overlay = document.getElementById('resultOverlay');
+      const overlayIcon = document.getElementById('resultOverlayIcon');
+
+      const buttons = document.getElementById('optionsContainer').children;
+
+      for (let btn of buttons) {
+        btn.classList.remove('active-scale', 'hover:bg-slate-800', 'hover-trigger');
+        btn.onclick = null;
+
+        const badge = btn.querySelector('span.badge-element'); // クラス名で元素モードのバッジのみを取得
+        const iconDiv = btn.querySelector('div:last-child');
+        
+        const btnNum = parseInt(btn.getAttribute('data-num'));
+        
+        // 元素モードのバッジがある場合は、回答後に正しい原子番号に書き換える
+        if (badge) {
+          badge.innerText = btnNum;
+        }
+        
+        if (btnNum === correctElement.num) {
+          btn.className = "w-full bg-emerald-950/80 border-2 border-emerald-500 text-left p-4 rounded-xl flex items-center justify-between text-sm sm:text-base font-bold transition-all text-emerald-100 text-light-force";
+          iconDiv.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400 text-teal-force text-lg"></i>';
+        } else if (btn === chosenButton && !isCorrect) {
+          btn.className = "w-full bg-rose-950/80 border-2 border-rose-500 text-left p-4 rounded-xl flex items-center justify-between text-sm sm:text-base font-bold transition-all text-rose-100 text-light-force";
+          iconDiv.innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-400 text-lg"></i>';
+        } else {
+          btn.className = "w-full bg-slate-950/50 opacity-40 border-2 border-slate-900 text-left p-4 rounded-xl flex items-center justify-between text-sm sm:text-base transition-all";
+        }
+      }
+
+      if (isCorrect) {
+        gameState.score++;
+        playSound('correct');
+        
+        overlay.classList.add('bg-emerald-500/10');
+        overlayIcon.className = "fa-regular fa-circle text-emerald-400 text-teal-force text-7xl transform scale-100 transition-all duration-300";
+        overlay.style.opacity = '1';
+      } else {
+        playSound('wrong');
+
+        overlay.classList.add('bg-rose-500/10');
+        overlayIcon.className = "fa-solid fa-times text-rose-500 text-7xl transform scale-100 transition-all duration-300";
+        overlay.style.opacity = '1';
+      }
+
+      showExplanation(correctElement);
+    }
+
+    // 📖 解説パネルの展開
+    function showExplanation(element) {
+      const expContainer = document.getElementById('explanationContainer');
+      const expEmoji = document.getElementById('expEmoji');
+      const expTitle = document.getElementById('expTitle');
+      const expCategory = document.getElementById('expCategory');
+      const expText = document.getElementById('expText');
+
+      let emoji = "💡";
+      if (element.group === "非金属") emoji = "🎈";
+      else if (element.group === "希ガス") emoji = "⚡";
+      else if (element.group === "アルカリ金属") emoji = "💥";
+      else if (element.group === "アルカリ土類金属") emoji = "💎";
+      else if (element.group === "遷移金属") emoji = "⚔️";
+      else if (element.group === "その他の金属") emoji = "🥫";
+      else if (element.group === "ハロゲン") emoji = "🧪";
+      else if (element.group === "単体") emoji = "🍃";
+      else if (element.group === "化合物") emoji = "🫧";
+
+      expEmoji.innerText = emoji;
+      expTitle.innerHTML = `${element.name} (${formatFormula(element.symbol)})`;
+      expCategory.innerText = element.group;
+      expText.innerText = element.desc;
+
+      expContainer.classList.remove('hidden');
+      setTimeout(() => {
+        expContainer.classList.remove('scale-95', 'opacity-0');
+      }, 50);
+    }
+
+    function nextQuestion() {
+      playSound('click');
+      gameState.currentIdx++;
+      if (gameState.currentIdx < 20) {
+        loadQuestion();
+      } else {
+        finishGame();
+      }
+    }
+
+    // 🎉 ゲーム終了・お祝いリザルト
+    function finishGame() {
+      showSection('result');
+
+      const finalScore = gameState.score;
+      document.getElementById('finalScore').innerText = finalScore;
+
+      const highScore = parseInt(localStorage.getItem('element_high_score') || '0');
+      if (finalScore > highScore) {
+        localStorage.setItem('element_high_score', finalScore.toString());
+        document.getElementById('highScoreText').innerText = `${finalScore}問`;
+      }
+
+      const evalText = document.getElementById('scoreEvaluation');
+      const resTitle = document.getElementById('resultTitle');
+      const resSub = document.getElementById('resultSub');
+      const resEmoji = document.getElementById('resultEmoji');
+
+      if (finalScore === 20) {
+        resEmoji.innerText = "👑";
+        resTitle.innerText = "超パーフェクト！！";
+        resSub.innerText = "ものすごい！全問に完璧に答えてみせました！";
+        evalText.innerText = "元素＆化学式マスター認定！";
+        evalText.className = "text-xs px-3 py-1 bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 text-dark-force font-black rounded-full shadow-lg";
+        
+        playSound('congrats');
+        launchConfetti();
+      } else if (finalScore >= 16) {
+        resEmoji.innerText = "🎉";
+        resTitle.innerText = "素晴らしい成績！";
+        resSub.innerText = "合格！もうすっかり化学のスペシャリストですね！";
+        evalText.innerText = "一流科学者レベル！";
+        evalText.className = "text-xs px-2.5 py-1 bg-green-500/20 text-green-300 rounded-full font-bold text-green-300";
+        playSound('congrats');
+      } else if (finalScore >= 10) {
+        resEmoji.innerText = "👍";
+        resTitle.innerText = "よく頑張りました！";
+        resSub.innerText = "半分以上正解です！この調子でどんどん覚えよう！";
+        evalText.innerText = "あと一歩で秀才！";
+        evalText.className = "text-xs px-2.5 py-1 bg-blue-500/20 text-blue-300 rounded-full font-bold text-blue-300";
+        playSound('click');
+      } else {
+        resEmoji.innerText = "📝";
+        resTitle.innerText = "ドンマイ！次はきっとできる！";
+        resSub.innerText = "図鑑やもう一度のチャレンジで復習してみてね。";
+        evalText.innerText = "これから伸びる！";
+        evalText.className = "text-xs px-2.5 py-1 bg-slate-500/20 text-slate-400 rounded-full font-bold text-slate-400";
+        playSound('click');
+      }
+    }
+
+    function restartGame() {
+      pressStartQuiz();
+    }
+
+    // 🎊 お祝い紙吹雪
+    function launchConfetti() {
+      const svg = document.getElementById('confettiSvg');
+      svg.innerHTML = '';
+      
+      const colors = ['#f43f5e', '#ec4899', '#d946ef', '#a855f7', '#8b5cf6', '#6366f1', '#3b82f6', '#0ea5e9', '#06b6d4', '#14b8a6', '#10b981', '#22c55e', '#84cc16', '#eab308', '#f97316'];
+      
+      const width = svg.clientWidth || window.innerWidth;
+      const height = 220;
+
+      for (let i = 0; i < 90; i++) {
+        const x = Math.random() * width;
+        const y = Math.random() * -30 - 10;
+        const r = Math.random() * 6 + 3;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        const shapeType = Math.random() > 0.5 ? 'rect' : 'circle';
+        let element;
+
+        if (shapeType === 'rect') {
+          element = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          element.setAttribute('width', (r * 1.5).toString());
+          element.setAttribute('height', r.toString());
+          element.setAttribute('transform', `rotate(${Math.random() * 360})`);
+        } else {
+          element = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          element.setAttribute('r', (r / 2).toString());
+        }
+
+        element.setAttribute('x', x.toString());
+        element.setAttribute('y', y.toString());
+        element.setAttribute('fill', color);
+        element.setAttribute('opacity', (Math.random() * 0.4 + 0.6).toString());
+
+        const duration = Math.random() * 2.0 + 1.5;
+        const delay = Math.random() * 1.2;
+        const drift = (Math.random() - 0.5) * 120;
+
+        element.style.transformOrigin = `${x}px ${y}px`;
+        element.style.transition = `transform ${duration}s cubic-bezier(0.1, 0.8, 0.3, 1) ${delay}s, opacity ${duration}s ease ${delay}s`;
+
+        svg.appendChild(element);
+
+        setTimeout(() => {
+          element.style.transform = `translate(${drift}px, ${height + Math.random() * 50}px) rotate(${Math.random() * 720}deg)`;
+          element.style.opacity = '0';
+        }, 40);
+      }
+    }
+
+    // 📖 学習図鑑の制御
+    function switchEncyclopediaTab(tab) {
+      playSound('click');
+      gameState.currentTab = tab;
+      
+      const tabE = document.getElementById('tabElements');
+      const tabF = document.getElementById('tabFormulas');
+
+      if (tab === 'elements') {
+        tabE.className = "flex-1 text-center py-2 text-xs sm:text-sm font-bold rounded-xl transition-all bg-teal-500 text-slate-950 text-dark-force";
+        tabF.className = "flex-1 text-center py-2 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-400 text-slate-400-force hover:bg-slate-900/50";
+      } else {
+        tabF.className = "flex-1 text-center py-2 text-xs sm:text-sm font-bold rounded-xl transition-all bg-blue-500 text-slate-950 text-dark-force";
+        tabE.className = "flex-1 text-center py-2 text-xs sm:text-sm font-bold rounded-xl transition-all text-slate-400 text-slate-400-force hover:bg-slate-900/50";
+      }
+
+      buildEncyclopedia();
+    }
+
+    function buildEncyclopedia() {
+      const grid = document.getElementById('encyclopediaGrid');
+      grid.innerHTML = '';
+
+      const query = document.getElementById('searchBar').value.toLowerCase();
+      const groupFilter = document.getElementById('groupFilter').value;
+
+      // 選択中のタブに合わせて描画元データを切り替える
+      const dataset = gameState.currentTab === 'elements' ? ELEMENTS : FORMULAS;
+      const seenSet = gameState.currentTab === 'elements' ? gameState.seenElements : gameState.seenFormulas;
+
+      dataset.forEach(element => {
+        const matchesSearch = element.name.includes(query) || 
+                              element.symbol.toLowerCase().includes(query) || 
+                              element.num.toString() === query;
+        const matchesGroup = groupFilter === 'all' || element.group === groupFilter;
+
+        if (!matchesSearch || !matchesGroup) return;
+
+        const card = document.createElement('div');
+        const isSeen = seenSet.has(element.num);
+
+        if (isSeen) {
+          card.className = "bg-slate-900 border border-slate-700/60 p-4 rounded-2xl flex flex-col justify-between hover:border-teal-500 cursor-pointer transition-all hover-trigger custom-shadow";
+          card.onclick = () => showElementDetail(element);
+          
+          card.innerHTML = `
+            <div class="flex justify-between items-start">
+              <span class="text-xs text-slate-500 text-slate-400-force font-bold">${element.num}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-lg bg-slate-800 text-teal-400 text-teal-force font-bold shrink-0">${element.group}</span>
+            </div>
+            <div class="text-center my-3">
+              <div class="text-2xl font-black text-white text-light-force tracking-wider">${formatFormula(element.symbol)}</div>
+              <div class="text-xs text-slate-300 text-light-force font-bold mt-1">${element.name}</div>
+            </div>
+            <div class="text-[10px] text-slate-500 text-slate-400-force text-right truncate italic">${element.english}</div>
+          `;
+        } else {
+          card.className = "bg-slate-950/60 border border-slate-900/80 p-4 rounded-2xl flex flex-col justify-between opacity-60";
+          card.innerHTML = `
+            <div class="flex justify-between items-start">
+              <span class="text-xs text-slate-700 font-bold">${element.num}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-lg bg-slate-900 text-slate-700 font-bold shrink-0">???</span>
+            </div>
+            <div class="text-center my-4">
+              <div class="text-2xl font-black text-slate-700">?</div>
+              <div class="text-xs text-slate-600 font-bold">未発見 (クイズで出会おう)</div>
+            </div>
+            <div class="text-[10px] text-slate-750 text-right italic">?????</div>
+          `;
+        }
+
+        grid.appendChild(card);
+      });
+    }
+
+    function filterEncyclopedia() {
+      buildEncyclopedia();
+    }
+
+    // ℹ️ 物質詳細ポップアップの展開
+    function showElementDetail(element) {
+      playSound('click');
+      const title = document.getElementById('modalTitle');
+      const msg = document.getElementById('modalMessage');
+      const emoji = document.getElementById('modalEmoji');
+
+      let groupEmoji = "💡";
+      if (element.group === "非金属") groupEmoji = "🎈";
+      else if (element.group === "希ガス") groupEmoji = "⚡";
+      else if (element.group === "アルカリ金属") groupEmoji = "💥";
+      else if (element.group === "アルカリ土類金属") groupEmoji = "💎";
+      else if (element.group === "遷移金属") groupEmoji = "⚔️";
+      else if (element.group === "その他の金属") groupEmoji = "🥫";
+      else if (element.group === "ハロゲン") groupEmoji = "🧪";
+      else if (element.group === "単体") groupEmoji = "🍃";
+      else if (element.group === "化合物") groupEmoji = "🫧";
+
+      emoji.innerText = groupEmoji;
+      title.innerHTML = `${element.name} (${formatFormula(element.symbol)})`;
+      msg.innerHTML = `
+        <div class="text-left space-y-3 mt-2">
+          <div class="grid grid-cols-2 gap-2 text-xs border-b border-slate-800 pb-2.5">
+            <div><strong class="text-slate-400 text-slate-400-force">図鑑番号:</strong> <span class="text-white text-light-force font-bold">${element.num}</span></div>
+            <div><strong class="text-slate-400 text-slate-400-force">分類:</strong> <span class="text-teal-400 text-teal-force font-bold">${element.group}</span></div>
+            <div class="col-span-2"><strong class="text-slate-400 text-slate-400-force">英語名:</strong> <span class="text-white text-light-force font-bold">${element.english}</span></div>
+          </div>
+          <div class="text-xs sm:text-sm text-slate-300 text-light-force pt-1 leading-relaxed">
+            <strong class="text-slate-400 text-slate-400-force block mb-1">💡 この物質の特徴:</strong>
+            ${element.desc}
+          </div>
+        </div>
+      `;
+
+      const modal = document.getElementById('customModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeModal() {
+      playSound('click');
+      const modal = document.getElementById('customModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  </script>
+</body>
+</html>
