@@ -120,7 +120,7 @@
           理科がもっと楽しくなる！難易度別クイズ
         </h2>
         <p class="text-xs sm:text-sm text-slate-300 text-light-force px-4 leading-relaxed opacity-90 max-w-xl mx-auto">
-          元素記号や専門化学式をマスターしよう！お好みの「クイズモード」と「難易度」を選んで、「挑戦スタート！」をクリックしてください。
+          元素記号や専門化学式をマスターしよう！お好みの「クイズモード」と「難易度」を選んで、「クイズに挑戦！」をクリックしてください。
         </p>
       </div>
 
@@ -152,7 +152,7 @@
               <span class="text-[10px] text-slate-400 text-slate-400-force">水素 の記号は？</span>
             </button>
 
-            <!-- 原子番号→名前 (超高難度・新モード) -->
+            <!-- 原子番号→名前 -->
             <button onclick="selectMode('numToName')" id="btn-mode-numToName" class="w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between group bg-slate-950/40 border-slate-800 hover:border-slate-700">
               <div class="flex items-center gap-3">
                 <span class="text-lg">👑</span>
@@ -227,7 +227,7 @@
 
           <!-- クイズ開始ボタン -->
           <button onclick="pressStartQuiz()" class="w-full bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-500 hover:to-blue-600 font-extrabold py-3.5 rounded-xl text-sm sm:text-base hover-trigger active-scale transition-all shadow-lg border border-teal-400/20 text-slate-950 text-dark-force mt-4">
-            🚀 この設定でクイズに挑戦！
+            🚀 クイズに挑戦！
           </button>
         </div>
 
@@ -237,7 +237,7 @@
       <div class="flex justify-around text-slate-400 text-slate-400-force text-sm pt-2 w-full max-w-md mx-auto">
         <div>
           <span class="block text-xl font-bold text-slate-200 text-light-force" id="highScoreText">0問</span>
-          最高スコア (20問中)
+          最高スコア (5問中)
         </div>
         <div class="border-r border-slate-800 w-px"></div>
         <div>
@@ -252,11 +252,11 @@
       <!-- プログレスバー & カウンター -->
       <div class="space-y-2">
         <div class="flex justify-between items-center text-sm">
-          <span class="text-slate-400 text-slate-400-force font-bold">進行度: <strong id="currentQuestionNum" class="text-teal-400 text-teal-force">1</strong> / 20 問</span>
+          <span class="text-slate-400 text-slate-400-force font-bold">進行度: <strong id="currentQuestionNum" class="text-teal-400 text-teal-force">1</strong> / 5 問</span>
           <span class="text-slate-400 text-slate-400-force font-bold">正解数: <strong id="currentScore" class="text-green-400 text-teal-force">0</strong></span>
         </div>
         <div class="w-full bg-slate-800 rounded-full h-3.5 overflow-hidden">
-          <div id="progressBar" class="bg-gradient-to-r from-teal-400 via-blue-400 to-indigo-500 h-full transition-all duration-355" style="width: 5%"></div>
+          <div id="progressBar" class="bg-gradient-to-r from-teal-400 via-blue-400 to-indigo-500 h-full transition-all duration-355" style="width: 20%"></div>
         </div>
       </div>
 
@@ -324,14 +324,14 @@
       <div class="w-40 h-40 sm:w-48 sm:h-48 rounded-full border-4 border-dashed border-teal-400 flex flex-col items-center justify-center mx-auto custom-shadow bg-slate-900/80 relative">
         <span class="text-xs text-slate-400 text-slate-400-force uppercase tracking-widest font-bold">スコア</span>
         <div class="text-4xl sm:text-5xl font-black text-slate-100 text-light-force my-1">
-          <span id="finalScore" class="text-teal-400 text-teal-force">20</span><span class="text-2xl text-slate-400 text-slate-400-force">/20</span>
+          <span id="finalScore" class="text-teal-400 text-teal-force">5</span><span class="text-2xl text-slate-400 text-slate-400-force">/5</span>
         </div>
         <span class="text-xs px-2.5 py-1 bg-teal-500/20 text-teal-300 text-teal-force rounded-full font-bold" id="scoreEvaluation">パーフェクト！</span>
       </div>
 
-      <!-- アクションボタン -->
+      <!-- アクションボタン (不具合対策のためonclickで直接スタート処理を呼ぶように簡素化) -->
       <div class="space-y-3 px-4 max-w-sm mx-auto">
-        <button onclick="restartGame()" class="w-full bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-500 hover:to-blue-600 font-extrabold py-3.5 rounded-xl text-sm sm:text-base hover-trigger transition-all shadow-lg border border-teal-400/20">
+        <button onclick="pressStartQuiz()" class="w-full bg-gradient-to-r from-teal-400 to-blue-500 hover:from-teal-500 hover:to-blue-600 font-extrabold py-3.5 rounded-xl text-sm sm:text-base hover-trigger transition-all shadow-lg border border-teal-400/20">
           <i class="fa-solid fa-rotate-left mr-1 text-dark-force"></i><span class="text-dark-force">もう一度遊ぶ</span>
         </button>
         <button onclick="goHome()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-3 rounded-xl text-sm sm:text-base hover-trigger transition-all border border-slate-700">
@@ -449,7 +449,7 @@
       { num: 113, symbol: "Nh", name: "ニホニウム", english: "Nihonium", group: "その他の金属", difficulty: 3, desc: "日本で発見され命名された新元素。非常に重く不安定なためすぐ崩壊します。" }
     ];
 
-    // 🔬 2. 専門・大学レベルの化学式データ（30種類）
+    // 🔬 2. 化学式データ（30種類の一意なIDに修正）
     // difficulty: 1 (Easy/初級), 2 (Normal/中級), 3 (Hard/上級)
     const FORMULAS = [
       { num: 1, symbol: "H2O", name: "水", english: "Water", group: "化合物", difficulty: 1, desc: "水素と酸素が2:1の割合で結合した、生命の維持に絶対不可欠な液体。" },
@@ -459,7 +459,7 @@
       { num: 5, symbol: "HCl", name: "塩化水素", english: "Hydrogen Chloride", group: "化合物", difficulty: 1, desc: "気体は塩化水素。これを水に溶かした水溶液は「塩酸」と呼ばれ胃液にも配合されています。" },
       { num: 6, symbol: "O2", name: "酸素分子", english: "Oxygen Gas", group: "単体", difficulty: 1, desc: "空気中に約21％含まれ、生物が呼吸して体内でエネルギーを作るのに使う気体。" },
       { num: 7, symbol: "H2", name: "水素分子", english: "Hydrogen Gas", group: "単体", difficulty: 1, desc: "単体分子としては宇宙で最も軽くて燃えやすい気体。クリーンエネルギーとしても大注目。" },
-      { num: 8, symbol: "N2", name: "窒素分子", english: "Nitrogen Gas", group: "単体", difficulty: 1, desc: "空気の約78％を占める無色無臭の気体。非常に安定しており食品の酸化防止用ガスとしてポテチ of 袋等に利用。" },
+      { num: 8, symbol: "N2", name: "窒素分子", english: "Nitrogen Gas", group: "単体", difficulty: 1, desc: "空気の約78％を占める無色無臭の気体。非常に安定しており食品の酸化防止用ガスとしてポテトチップスの袋等に利用。" },
       { num: 9, symbol: "CO", name: "一酸化炭素", english: "Carbon Monoxide", group: "化合物", difficulty: 1, desc: "有機物が不完全燃焼すると生じる、非常に有毒な無色無臭の気体。酸素を運ぶ赤血球の働きを強力に阻害します。" },
       { num: 10, symbol: "NaHCO3", name: "炭酸水素ナトリウム", english: "Sodium Hydrogen Carbonate", group: "化合物", difficulty: 1, desc: "重曹。お掃除用や、加熱するとCO2を放出して膨らむふくらし粉（ベーキングパウダー）として家庭でも活躍。" },
       { num: 11, symbol: "NaOH", name: "水酸化ナトリウム", english: "Sodium Hydroxide", group: "化合物", difficulty: 2, desc: "別名「苛性ソーダ」。二酸化炭素を強力に吸収する強塩基の代表格。石鹸製造や工業原料に必須。" },
@@ -477,11 +477,11 @@
       { num: 23, symbol: "C6H5NO2", name: "ニトロベンゼン", english: "Nitrobenzene", group: "化合物", difficulty: 3, desc: "ベンゼンを混酸でニトロ化して得られる、特異な杏仁（アーモンド）の香りがする黄色い油状液体。アニリンの原料。" },
       { num: 24, symbol: "H2NCH2COOH", name: "グリシン", english: "Glycine", group: "化合物", difficulty: 3, desc: "最も単純な構造を持つ、光学異性体の存在しないアミノ酸。甘みがあり食品添加物や調味料にも使われます。" },
       { num: 25, symbol: "C6H12O6", name: "グルコース", english: "Glucose", group: "化合物", difficulty: 3, desc: "ブドウ糖とも呼ばれる最も代表的な単糖。光合成によって作られ、生物の細胞呼吸の中核エネルギー源となります。" },
-      { num: 8, symbol: "C6H4(OCOCH3)COOH", name: "アセチルサリチル酸", english: "Acetylsalicylic Acid", group: "化合物", difficulty: 3, desc: "別名「アスピリン」。サリチル酸をアセチル化して作られる、100年以上愛用されている代表的な解熱鎮痛剤。" },
-      { num: 9, symbol: "C8H10N4O2", name: "カフェイン", english: "Caffeine", group: "化合物", difficulty: 3, desc: "コーヒーや茶に含まれるプリンアルカロイド。脳内の中枢神経に働いて眠気を抑える覚醒作用をもちます。" },
-      { num: 10, symbol: "C3H5(ONO2)3", name: "ニトログリセリン", english: "Nitroglycerin", group: "化合物", difficulty: 3, desc: "ノーベルが発明したダイナマイトの原料。心臓医療においては、血管を拡張して狭心症の発作を止める特効薬です。" },
-      { num: 6, symbol: "K4[Fe(CN)6]", name: "ヘキサシアニド鉄(II)酸カリウム", english: "Potassium Ferrocyanide", group: "化合物", difficulty: 3, desc: "「黄血塩」とも呼ばれる錯化合物。鉄(III)イオンと出会うと美しく濃い青色（ベルリン青）に変色する検出試薬。" },
-      { num: 7, symbol: "C6H4(OH)COOH", name: "サリチル酸", english: "Salicylic Acid", group: "化合物", difficulty: 3, desc: "消炎鎮痛作用をもつ芳香族カルボン酸。アスピリン（解熱薬）やサリチル酸メチル（湿布薬）の合成原料。" }
+      { num: 26, symbol: "C6H4(OCOCH3)COOH", name: "アセチルサリチル酸", english: "Acetylsalicylic Acid", group: "化合物", difficulty: 3, desc: "別名「アスピリン」。サリチル酸をアセチル化して作られる、100年以上愛用されている代表的な解熱鎮痛剤。" },
+      { num: 27, symbol: "C8H10N4O2", name: "カフェイン", english: "Caffeine", group: "化合物", difficulty: 3, desc: "コーヒーや茶に含まれるプリンアルカロイド。脳内の中枢神経に働いて眠気を抑える覚醒作用をもちます。" },
+      { num: 28, symbol: "C3H5(ONO2)3", name: "ニトログリセリン", english: "Nitroglycerin", group: "化合物", difficulty: 3, desc: "ノーベルが発明したダイナマイトの原料。心臓医療においては、血管を拡張して狭心症の発作を止める特効薬です。" },
+      { num: 29, symbol: "K4[Fe(CN)6]", name: "ヘキサシアニド鉄(II)酸カリウム", english: "Potassium Ferrocyanide", group: "化合物", difficulty: 3, desc: "「黄血塩」とも呼ばれる錯化合物。鉄(III)イオンと出会うと美しく濃い青色（ベルリン青）に変色する検出試薬。" },
+      { num: 30, symbol: "C6H4(OH)COOH", name: "サリチル酸", english: "Salicylic Acid", group: "化合物", difficulty: 3, desc: "消炎鎮痛作用をもつ芳香族カルボン酸。アスピリン（解熱薬）やサリチル酸メチル（湿布薬）の合成原料。" }
     ];
 
     // 🌐 アプリの状態管理
@@ -491,13 +491,15 @@
       mode: 'symToName', // 'symToName' | 'nameToSym' | 'numToName' | 'formToSub' | 'subToForm'
       difficulty: 'easy', // 'easy' | 'normal' | 'hard' | 'all'
       currentDataset: [], // クイズで使う対象データ（ELEMENTS または FORMULAS）
-      questions: [],     // 今回の20問の配列
+      questions: [],     // 今回の5問の配列
       soundEnabled: true,
       answered: false,   
       seenElements: new Set(),
       seenFormulas: new Set(),
       currentTab: 'elements' // 図鑑のタブ：'elements' | 'formulas'
     };
+
+    const TOTAL_QUESTIONS = 5; // クイズの問題数を20問から5問に固定
 
     // 📝 化学式の数字を自動で下付き文字（Subscript）タグに書き換える関数
     function formatFormula(str) {
@@ -572,8 +574,10 @@
       const storedSeenF = localStorage.getItem('formula_seen');
       if (storedSeenF) gameState.seenFormulas = new Set(JSON.parse(storedSeenF));
 
-      document.getElementById('highScoreText').innerText = `${storedHighScore}問`;
-      document.getElementById('playedCountText').innerText = `${storedPlayed}回`;
+      const hsEl = document.getElementById('highScoreText');
+      const pcEl = document.getElementById('playedCountText');
+      if (hsEl) hsEl.innerText = `${storedHighScore}問`;
+      if (pcEl) pcEl.innerText = `${storedPlayed}回`;
 
       // ホーム画面の初期セット
       selectMode('symToName');
@@ -662,6 +666,8 @@
 
     // 🚀 クイズ開始（設定適用）
     function pressStartQuiz() {
+      playSound('click');
+      
       // 適切なデータプールを取得
       if (gameState.mode === 'symToName' || gameState.mode === 'nameToSym' || gameState.mode === 'numToName') {
         gameState.currentDataset = ELEMENTS;
@@ -680,35 +686,29 @@
         filteredPool = gameState.currentDataset.filter(item => item.difficulty === targetDiff);
       }
 
-      // 問題データ数が20問未満の場合、他の難易度からランダムに補填して20問にする
-      if (filteredPool.length < 20) {
-        const diffValues = Object.values(diffMap);
-        const currentDiffVal = diffMap[gameState.difficulty] || 0;
-        
-        // 足りない問題数
-        const needed = 20 - filteredPool.length;
-        
-        // 補填用の候補プール（現在難易度以外の全データ）
-        const fallbackCandidates = gameState.currentDataset.filter(item => item.difficulty !== currentDiffVal);
-        const shuffledFallback = fallbackCandidates.sort(() => 0.5 - Math.random());
-        
-        // マージして20問確保
-        filteredPool = filteredPool.concat(shuffledFallback.slice(0, needed));
-      }
-
       // クイズ開始の初期化
       gameState.score = 0;
       gameState.currentIdx = 0;
       gameState.answered = false;
 
-      // ランダムに並び替えて20問に制限
-      gameState.questions = filteredPool.sort(() => 0.5 - Math.random()).slice(0, 20);
+      // ランダムに並び替えて5問に制限
+      gameState.questions = filteredPool.sort(() => 0.5 - Math.random()).slice(0, TOTAL_QUESTIONS);
 
-      // 挑戦回数の加算
+      // 万が一、該当難易度の問題が5問に満たない場合のセーフガード（全データから補填）
+      if (gameState.questions.length < TOTAL_QUESTIONS) {
+        const needed = TOTAL_QUESTIONS - gameState.questions.length;
+        const fallbackCandidates = gameState.currentDataset.filter(item => !gameState.questions.includes(item));
+        const shuffledFallback = fallbackCandidates.sort(() => 0.5 - Math.random());
+        gameState.questions = gameState.questions.concat(shuffledFallback.slice(0, needed));
+      }
+
+      // 挑戦回数の加算と表示反映
       let playedCount = parseInt(localStorage.getItem('element_played_count') || '0');
       playedCount++;
       localStorage.setItem('element_played_count', playedCount.toString());
-      document.getElementById('playedCountText').innerText = `${playedCount}回`;
+      
+      const pcEl = document.getElementById('playedCountText');
+      if (pcEl) pcEl.innerText = `${playedCount}回`;
 
       showSection('quiz');
       loadQuestion();
@@ -734,7 +734,7 @@
       // 進行状況の進捗表示
       document.getElementById('currentQuestionNum').innerText = gameState.currentIdx + 1;
       document.getElementById('currentScore').innerText = gameState.score;
-      const progressPercent = ((gameState.currentIdx + 1) / 20) * 100;
+      const progressPercent = ((gameState.currentIdx + 1) / TOTAL_QUESTIONS) * 100;
       document.getElementById('progressBar').style.width = `${progressPercent}%`;
 
       const overlay = document.getElementById('resultOverlay');
@@ -770,12 +770,12 @@
         qLabel.innerHTML = `この 化学式 が表す物質の名前は？ ${diffLabel}`;
         qMain.innerHTML = formatFormula(currentElement.symbol);
         qSub.innerText = `分類: ${currentElement.group} | 英語名: ${currentElement.english}`;
-        watermark.innerText = ""; // 化学式のときは透かしを非表示にして文字の重なりを防ぐ
+        watermark.innerText = ""; 
       } else if (gameState.mode === 'subToForm') {
         qLabel.innerHTML = `この 物質 の化学式はどれ？ ${diffLabel}`;
         qMain.innerHTML = currentElement.name;
         qSub.innerText = `分類: ${currentElement.group} | 英語名: ${currentElement.english}`;
-        watermark.innerText = ""; // 化学式のときは透かしを非表示にして文字の重なりを防ぐ
+        watermark.innerText = ""; 
       }
 
       buildOptions(currentElement);
@@ -786,12 +786,12 @@
       const container = document.getElementById('optionsContainer');
       container.innerHTML = '';
 
-      // 不正解候補の選出
+      // 不正解候補の選出 (重複のない安全なIDで行う)
       const wrongCandidates = gameState.currentDataset.filter(el => el.num !== correctElement.num);
       const shuffledWrongs = wrongCandidates.sort(() => 0.5 - Math.random()).slice(0, 3);
       const finalChoices = [correctElement, ...shuffledWrongs].sort(() => 0.5 - Math.random());
 
-      // 原子番号バッジを表示するかどうか（元素モードのみ。ただし「原子番号 ➜ 元素名」クイズのときは選択肢に番号を出すと完全に答えになってしまうため非表示）
+      // 原子番号バッジを表示するかどうか
       const isElementMode = (gameState.mode === 'symToName' || gameState.mode === 'nameToSym');
 
       finalChoices.forEach(element => {
@@ -921,7 +921,7 @@
     function nextQuestion() {
       playSound('click');
       gameState.currentIdx++;
-      if (gameState.currentIdx < 20) {
+      if (gameState.currentIdx < TOTAL_QUESTIONS) {
         loadQuestion();
       } else {
         finishGame();
@@ -938,7 +938,8 @@
       const highScore = parseInt(localStorage.getItem('element_high_score') || '0');
       if (finalScore > highScore) {
         localStorage.setItem('element_high_score', finalScore.toString());
-        document.getElementById('highScoreText').innerText = `${finalScore}問`;
+        const hsEl = document.getElementById('highScoreText');
+        if (hsEl) hsEl.innerText = `${finalScore}問`;
       }
 
       const evalText = document.getElementById('scoreEvaluation');
@@ -946,7 +947,7 @@
       const resSub = document.getElementById('resultSub');
       const resEmoji = document.getElementById('resultEmoji');
 
-      if (finalScore === 20) {
+      if (finalScore === TOTAL_QUESTIONS) {
         resEmoji.innerText = "👑";
         resTitle.innerText = "超パーフェクト！！";
         resSub.innerText = "ものすごい！全問に完璧に答えてみせました！";
@@ -955,14 +956,14 @@
         
         playSound('congrats');
         launchConfetti();
-      } else if (finalScore >= 16) {
+      } else if (finalScore >= 4) {
         resEmoji.innerText = "🎉";
         resTitle.innerText = "素晴らしい成績！";
         resSub.innerText = "合格！もうすっかり化学のスペシャリストですね！";
         evalText.innerText = "一流科学者レベル！";
         evalText.className = "text-xs px-2.5 py-1 bg-green-500/20 text-green-300 rounded-full font-bold text-green-300";
         playSound('congrats');
-      } else if (finalScore >= 10) {
+      } else if (finalScore >= 3) {
         resEmoji.innerText = "👍";
         resTitle.innerText = "よく頑張りました！";
         resSub.innerText = "半分以上正解です！この調子でどんどん覚えよう！";
@@ -979,6 +980,7 @@
       }
     }
 
+    // 🏆 もう一度遊ぶ (pressStartQuizを直接呼ぶようにしてスコアとカウンタを安全に初期化)
     function restartGame() {
       pressStartQuiz();
     }
